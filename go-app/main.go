@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", handleRoot)
+	http.HandleFunc("/", handleIndex)
 
 	// Determine port for HTTP service.
 	port := os.Getenv("PORT")
@@ -20,12 +20,16 @@ func main() {
 
 	// Start HTTP server.
 	log.Printf("listening on port %s", port)
-	if err := http.ListenAndServe(":"+port, http.DefaultServeMux); err != nil {
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatalf("%v", err)
 	}
 }
 
-func handleRoot(w http.ResponseWriter, r *http.Request) {
+func handleIndex(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
 	w.Header().Set("content-type", "text/plain")
 	for k, v := range r.Header {
 		fmt.Fprintf(w, "%s:%v\n", k, v)
