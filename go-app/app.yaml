@@ -1,1 +1,2 @@
-runtime: go115
+runtime: custom
+env: flex

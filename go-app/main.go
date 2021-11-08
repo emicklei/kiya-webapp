@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/kramphub/kiya"
 )
 
 func main() {
@@ -34,5 +36,8 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	for k, v := range r.Header {
 		fmt.Fprintf(w, "%s:%v\n", k, v)
 	}
+
+	fmt.Fprintf(w, "%v\n", kiya.Profiles)
+
 	io.WriteString(w, "kiya says hi")
 }
