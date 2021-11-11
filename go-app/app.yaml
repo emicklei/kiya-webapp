@@ -1,2 +1,13 @@
+# https://cloud.google.com/appengine/docs/flexible/python/reference/app-yaml
+
 runtime: custom
 env: flex
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 1
+env_variables:
+  PROJECT_ID: "x....."
+  LOCATION: "global"
+  KEY_RING: "kiya-keyring"
+  CRYPTO_KEY: "kiya-cryptokey"
+  BUCKET: "......."
