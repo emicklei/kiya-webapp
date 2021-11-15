@@ -4,6 +4,21 @@ import "html/template"
 
 var PageLayout_Template = template.Must(template.New("PageLayout").Parse(`
 <html>
+<head>
+    <style>
+        input,
+        label,
+        button, 
+		a {
+            font-size: xx-large;
+        }
+        .center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+    </style>
+</head>
 <body>
 <script>
   async function fetchAndCopy(urlEscapedName) {
@@ -46,7 +61,33 @@ var PageLayout_Template = template.Must(template.New("PageLayout").Parse(`
 	}
   }  
 </script>
-{{.Render "TableOfKeys"}}
+
+<script>
+function lookup(what) {
+	document.location = "/?q="+what
+}
+</script>
+
+<div class="center">
+	<input id="q" type="search">
+	<button
+		id="search"
+		onclick="javascript:lookup(document.getElementById('q').value);">Search</button>
+	{{.Render "TableOfKeys"}}	
+</div>
+
+<script>
+document.getElementById("q")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("search").click();
+    } else {
+		console.log(event);
+	}
+});
+</script>
+
 </body>
 </html>
 `))

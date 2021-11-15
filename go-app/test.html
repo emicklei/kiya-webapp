@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <style>
+        input,
+        label,
+        button {
+            font-size: xx-large;
+        }
+        .center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        function lookup(what) {
+            document.location = "/?q="+what
+        }
+    </script>
+    <div class="center">
+        <input id="q" type="search"><button
+            onclick="javascript:lookup(document.getElementById('q').value);">Search</button>
+    </div>
+</body>
+
+</html>

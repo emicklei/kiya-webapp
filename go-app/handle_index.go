@@ -33,38 +33,35 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	selection := []backend.Key{}
 	query := r.Form.Get("q")
-	if query == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		io.WriteString(w, "missing query parameter, e.g. '?q=google' ")
-		return
-	}
+	if query != "" {
 
-	back, err := newKMSBackend()
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		io.WriteString(w, err.Error())
-		return
-	}
+		back, err := newKMSBackend()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(w, err.Error())
+			return
+		}
 
-	keys, err := back.List(r.Context(), prof)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		io.WriteString(w, err.Error())
-		return
+		keys, err := back.List(r.Context(), prof)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(w, err.Error())
+			return
+		}
+
+		for _, each := range keys {
+			if strings.Contains(each.Name, query) {
+				selection = append(selection, each)
+			}
+		}
+		sort.Slice(selection, func(i, j int) bool {
+			return selection[i].Name < selection[j].Name
+		})
 	}
 
 	w.Header().Set("content-type", "text/html")
-	selection := []backend.Key{}
-	for _, each := range keys {
-		if strings.Contains(each.Name, query) {
-			selection = append(selection, each)
-		}
-	}
-	sort.Slice(selection, func(i, j int) bool {
-		return selection[i].Name < selection[j].Name
-	})
-
 	canvas := renderbee.NewHtmlCanvas(w)
 	page := renderbee.NewFragmentMap(PageLayout_Template)
 	page.Put("TableOfKeys", TableOfKeys{Keys: selection})
