@@ -1,3 +1,4 @@
 deploy.sh
 go-app/xs4me.yaml
 go-app/test
+.vscode
